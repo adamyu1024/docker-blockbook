@@ -37,8 +37,6 @@ RUN mkdir -p $GOPATH
 RUN echo -n "GO version: " && go version
 RUN echo -n "GOPATH: " && echo $GOPATH
 
-RUN mkdir /build
-
 RUN go env -w GO111MODULE=on
 RUN go env -w GOPROXY=https://goproxy.io,direct
 
@@ -54,7 +52,7 @@ ENV CGO_CFLAGS="-I/$HOME/rocksdb/include"
 ENV CGO_LDFLAGS="-L/$HOME/rocksdb -ldl -lrocksdb -lstdc++ -lm -lz -lbz2 -lsnappy -llz4"
 
 # Install Blockbook
-RUN cd $GOPATH/src && git clone https://github.com/SINOVATEblockchain/blockbook.git && cd blockbook && git checkout $TAG && \
+RUN cd $GOPATH/src && git clone https://github.com/adamyu1024/blockbook.git && cd blockbook && git checkout $TAG && \
          BUILDTIME=$(date --iso-8601=seconds); GITCOMMIT=$(git describe --always --dirty); \
          LDFLAGS="-X blockbook/common.version=${TAG} -X blockbook/common.gitcommit=${GITCOMMIT} -X blockbook/common.buildtime=${BUILDTIME}" && \
          go build -ldflags="-s -w ${LDFLAGS}"
